@@ -55,7 +55,7 @@ $taboptarray = array('mysql' => 'TYPE=MyISAM');
 $sqlarray = $dict->CreateTableSQL(cms_db_prefix().'module_quoteconnections', $flds, $taboptarray);
 $dict->ExecuteSQLArray($sqlarray);
 
-$this->AddTemplate("default",file_get_contents("../modules/Quotes/templates/default.tpl"));
+$this->AddTemplate("default",file_get_contents("../modules/Quotes2/templates/default.tpl"));
 
 $this->CreatePermission('managequotes', $this->Lang('permission'));
 

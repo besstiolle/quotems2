@@ -106,7 +106,7 @@ class Quotes2 extends CMSModule {
 	}
 
 	function GetVersion() {
-		return '1.0.0';
+		return '1.0.1';
 	}
 
 

@@ -24,11 +24,11 @@ switch ($params["todo"]) {
 		break;
 	}
 	case "reset" : {
-		$this->UpdateTemplate($templateid,"default",file_get_contents("../modules/Quotes/templates/default.tpl"));
+		$this->UpdateTemplate($templateid,"default",file_get_contents("../modules/Quotes2/templates/default.tpl"));
 		$params["module_message"]=$this->Lang("templatereset");
 		/*$this->Redirect($id, 'defaultadmin', $returnid,$params);
 		break;*/
-		$params["content"]=	file_get_contents("../modules/Quotes/templates/default.tpl");
+		$params["content"]=	file_get_contents("../modules/Quotes2/templates/default.tpl");
 		$params["todo"]="edit";		
 		unset($params["reset"]);
 		$this->Redirect($id, 'edittemplate', $returnid,$params);
@@ -72,7 +72,7 @@ switch ($params["todo"]) {
 }
 
 $name="";
-$content=file_get_contents("../modules/Quotes/templates/default.tpl");
+$content=file_get_contents("../modules/Quotes2/templates/default.tpl");
 
 if ($params["todo"]=="edit") {
 	$template=$this->_GetTemplate($params["templateid"]);	

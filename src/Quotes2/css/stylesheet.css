@@ -1,0 +1,25 @@
+.defaultquotebox {
+  width:200px;  
+  border:2px dashed #333;
+  margin:4px;
+}
+
+.quoteauthor {
+  text-style:italic;
+  padding-bottom:10px;
+}
+
+.quotereference {
+	padding-top:10px;
+  text-style:italic;
+  text-align:right;
+}
+
+.quotecontent {
+  width:80%;
+}
+
+.largequote {
+  font-size:150%;
+  color:#444444;
+}

@@ -2,8 +2,9 @@
 <table cellspacing="0" class="pagetable">
 	<thead>
 		<tr>
-			<th class="pageicon">&nbsp;</th>
-			<th>{$groups}</th>
+			<th class="pageicon">id</th>
+			<th>text ID</th>
+			<th>description</th>
 			<th class="pageicon">{$actions}</th>
 		</tr>
 	</thead>
@@ -11,8 +12,9 @@
 {foreach from=$items item=entry}
 {cycle values="row1,row2" assign=rowclass}
 		<tr class="{$rowclass}" onmouseover="this.className='{$rowclass}hover';" onmouseout="this.className='{$rowclass}';">
-			<td>&nbsp;</td>
-			<td>{$entry->name}</td>
+			<td>{$entry->id}</td>
+			<td>{$entry->code}</td>
+			<td>{$entry->desc}</td>
 			<td style="text-align:center">{$entry->editlink}{$entry->deletelink}</td>
 		</tr>
 {/foreach}

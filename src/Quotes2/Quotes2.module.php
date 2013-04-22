@@ -27,61 +27,32 @@ class Rss{
 	var $Template;
 	var $Items=array();
 	var $CashPath="tmp/";
-  var $inerror=false;
-  function rss($url){
-  	global $Items;
+	var $inerror=false;
+	function rss($url){
+		global $Items;
   	
-		if(!$url) {$this->inerror="RSS: url don't exists";return false;}//die("RSS: url don't exists");
-		/*$urlx=parse_url($url);
-		$Filename=$this->CashPath.$urlx[host].".rss";
-		$modifed=time()-@filemtime($Filename);
-		if(!file_exists($Filename) || $modifed>CASHE_TIMEOUT){
-			if( !($content = file_get_contents($url)) ) {$this->inerror="RSS: source error";return false;}//die("RSS: sourse error");
-			$rss_tmp=fopen($Filename,"w");
-			fputs($rss_tmp,$content);
-			fclose($rss_tmp);
-		}
-		else*/ $content = file_get_contents($url);
-		//echo $content;
+		if(!$url) {$this->inerror="RSS: url don't exists";return false;}
+		$content = file_get_contents($url);
 		preg_match_all("/<item>(.+)<\/item>/Uis",$content,$Items1,PREG_SET_ORDER);
 		foreach($Items1 as $indx=>$var){
 			$this->Items[$indx]=$var[1];
 		}
-		//echo count($this->Items);
 	}
 
 	function parseItems(){
-		//$Item=$this->Items[$this->Count];
-		//
-//		if(!$Item) return FALSE;
-		//echo "hejsa";
-		//$this->Count++;
 		$parsedarray=array();
 		foreach($this->Items as $item) {
 			preg_match_all("/<(title|link|description)>(.+)<\/(\\1)>/is",$item,$ParsedItem,PREG_SET_ORDER);
 			$newquote=array("author"=>htmlspecialchars($ParsedItem[0][2],ENT_QUOTES),
 											"content"=>strip_tags(html_entity_decode($ParsedItem[1][2])),
 											"reference"=>strip_tags(htmlspecialchars($ParsedItem[2][2],ENT_QUOTES)));
-			//echo "<pre>",strip_tags($newquote["content"])."</pre>";
+			
 			$parsedarray[]=$newquote;
-		  /*$ParsedArray["title"]      = htmlspecialchars($ParsedItem[0][2],ENT_QUOTES);
-		  $ParsedArray["link"]      = urldecode($ParsedItem[1][2]);
-		  $ParsedArray["description"] = htmlspecialchars($ParsedItem[2][2],ENT_QUOTES);*/
-		}
-		/*preg_match_all("/<(title|link|description)>(.+)<\/(\\1)>/is",$Item,$ParsedItem,PREG_SET_ORDER);
-		$ParsedArray["title"]      = htmlspecialchars($ParsedItem[0][2],ENT_QUOTES);
-		$ParsedArray["link"]      = urldecode($ParsedItem[1][2]);
-		$ParsedArray["description"] = htmlspecialchars($ParsedItem[2][2],ENT_QUOTES);
-*/
-		/*echo count($parsedarray);
-		echo "hej";*/
 		
-//print_r($parsedarray);
+		}
 		return $parsedarray;
 	}
 }
-
-
 
 
 class Quotes2 extends CMSModule {
@@ -106,9 +77,8 @@ class Quotes2 extends CMSModule {
 	}
 
 	function GetVersion() {
-		return '1.0.1';
+		return '1.0.2';
 	}
-
 
 	function InstallPostMessage() {
 		return $this->Lang("installpostmessage");
@@ -149,7 +119,8 @@ class Quotes2 extends CMSModule {
 		$this->SetParameterType('group',CLEAN_STRING);
 		$this->CreateParameter('quote', '', $this->lang('paramquoteshelp'));
 		$this->SetParameterType('quote',CLEAN_STRING);
-		//$this->SetParameterType('startpageoffset',CLEAN_INT);
+		
+
 	}
 
 
@@ -158,7 +129,6 @@ class Quotes2 extends CMSModule {
 		return array(
 		$this->Lang("plainquote")=>"1",
 		$this->Lang("rssquote")=>"2",
-		//$this->Lang("javascriptquote")=>"3"
 		);
 	}
 
@@ -166,13 +136,11 @@ class Quotes2 extends CMSModule {
 		switch ($type) {
 			case "1" : return $this->Lang("plainquote");
 			case "2" : return $this->Lang("rssquote");
-			//case "3" : return $this->Lang("javascriptquote");
 			default : return "unknown type";
 		}
 	}
 	
 	function GetRSSQuotes($info) {
-		//echo "hejse";
 		$quoteinfo=$this->GetQuote("",$info["id"]);
 		$rss=new Rss($quoteinfo["content"]);
 		if ($rss->inerror!="")  {
@@ -201,7 +169,6 @@ class Quotes2 extends CMSModule {
 
 	function GetQuoteProp($quoteid,$name,$default=false) {
 		$props=$this->GetQuoteProps($quoteid);
-		//echo $quoteid.",".$name;
 		if (!$props) return $default;
 		if (!isset($props[$name])) return $default;
 		return $props[$name];
@@ -218,11 +185,8 @@ class Quotes2 extends CMSModule {
 		} else {
 			$q="INSERT INTO ".cms_db_prefix()."module_quoteprops (value, name, quoteid) VALUES (?,?,?)";
 		}
-		//echo $q;
-		//die();
 		$p=array($value,$name,$quoteid);
 		$result=$db->Execute($q,$p);
-		//echo mysql_error();die();
 		return ($result==true);
 	}
 
@@ -279,7 +243,6 @@ class Quotes2 extends CMSModule {
 		}
 		$output=array();
 		while($row=$result->FetchRow()) {
-			//			print_r($row);
 			$output[]=$row;
 		}
 		return $output;
@@ -304,7 +267,6 @@ class Quotes2 extends CMSModule {
 		}
 		$output=array();
 		while($row=$result->FetchRow()) {
-			//print_r($row);
 			$props=$this->GetQuoteProps($row["id"]);
 			$row=array_merge($row,$props);
 			$output[]=$row;			
@@ -323,7 +285,6 @@ class Quotes2 extends CMSModule {
 		}
 		$output=array();
 		while($row=$result->FetchRow()) {
-			//print_r($row);
 			$props=$this->GetQuoteProps($row["id"]);
 			switch($row["type"]) {
 				case 1 : {
@@ -333,7 +294,6 @@ class Quotes2 extends CMSModule {
 				}
 				case 2 : {
 					$rssquotes=$this->GetRSSQuotes($row);
-					//echo count($rssquotes);
 					if (count($rssquotes)>0) {						
 						foreach($rssquotes as $rssquote) {
 							$output[]=$rssquote;
@@ -440,7 +400,6 @@ class Quotes2 extends CMSModule {
 		$sql="INSERT INTO ".cms_db_prefix()."module_quotetemplates (id,name,content,isdefault) VALUES (?,?,?,0)";
 		$values=array($newid,$name,$content);
 		$result=$db->Execute($sql,$values);
-		//echo mysql_error();die();
 		return $newid;
 	}
 
@@ -518,6 +477,10 @@ class Quotes2 extends CMSModule {
 		$this->IncreaseExposure($picked["id"]);
 		return $picked;
 	}
+	
+	function SelectAll($quotes) {
+	    return $quotes;
+	}
 
 	function SelectQuoteoftheday($quotes) {
 		$quote=array();
@@ -530,9 +493,6 @@ class Quotes2 extends CMSModule {
 			$this->SetPreference("lastidpick",$quote["id"]);
 		} else {
 			if ($lasttime<(time()-(24*60*60))) {
-				//quote is expired
-					
-				//  		  if (!$this->GetQuote("",$lastid)) echo "hi";
 				$this->SetPreference("lastdaypick",-1);
 				$this->SetPreference("lastidpick",-1);
 				$quote=$this->SelectQuoteoftheday($quotes);
@@ -544,7 +504,6 @@ class Quotes2 extends CMSModule {
 						break;
 					}
 				}
-				//$quote=$this->GetQuote("",$lastid);
 				if (count($quote)==0) {
 					//Quote must have been deleted
 					$this->SetPreference("lastdaypick",-1);
@@ -558,16 +517,13 @@ class Quotes2 extends CMSModule {
 	}
 
 
-	function SelectQuote($params) {
-		$output=array();
-		//$params["quote"]
+	function SelectQuotes($params) {
+		$output['quotes']=array();
 		$availablequotes=$this->GetQuotes();
-		//echo count($availablequotes);
 		$quotes=array();
 		 
 		if (isset($params["quote"]) && trim($params["quote"])!="") {
 			$selectedquotes=explode(",",$params["quote"]);
-			//print_r($selectedquotes);
 			foreach($availablequotes as $quote) {
 				foreach($selectedquotes as $textid) {
 					if ($quote["textid"]==$textid) {
@@ -577,7 +533,6 @@ class Quotes2 extends CMSModule {
 			}
 		} elseif (isset($params["group"]) && trim($params["group"])!="") {
 			$selectedgroups=explode(",",$params["group"]);
-			//  print_r($selectedgroups);
 			foreach($availablequotes as $quote) {
 				foreach($selectedgroups as $group) {
 					$group=$this->GetGroup($group);
@@ -592,20 +547,22 @@ class Quotes2 extends CMSModule {
 		unset($availablequotes); //free a little memory?
 		 
 		if (empty($quotes)) {
-			//echo "hi";
-			$output["content"]=$this->lang("nomatchingquotes");
-			$output["author"]="Roy Batty";
-			$output["reference"]="from the BladeRunner movie";
+			$quote = array(
+			    'content' => $this->lang("nomatchingquotes"),
+			    'author' => "Roy Batty",
+			    'reference' => "from the BladeRunner movie");
+			$output['quotes'][] = $quote;
 		} else {
 			$pickedby="random";
 			if (isset($params["pickedby"])) $pickedby=$params["pickedby"];
 			$quotecount=count($quotes);
 			$chosenindex=-1;
 			switch($pickedby) {
-				case "equal" : $output=$this->SelectEqual($quotes); break;
-				case "day" : $output=$this->SelectQuoteoftheday($quotes); break;
-				case "random" :
-				default: $output=$this->SelectRandom($quotes);
+				case "equal" : $output['quotes'][]=$this->SelectEqual($quotes); break;
+				case "day" : $output['quotes'][]=$this->SelectQuoteoftheday($quotes); break;
+				case "random" : $output['quotes'][]=$this->SelectRandom($quotes); break;
+				case "all" : $output['quotes']=$this->SelectAll($quotes); break;
+				default: $output['quotes'][]=$this->SelectRandom($quotes);
 			}
 		}
 		return $output;

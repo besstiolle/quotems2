@@ -91,13 +91,14 @@ $lang["savesettings"]="Save settings";
 $lang["settingssaved"]="Settings saved";
 
 $lang["parampickedbyhelp"]="How to pick the quote among the candidates, allow values are 
-'random' (which pick a random quote), 
-'equal' (which tries to make sure all quotes are shown approximately the same number of times,
-'day' (which selects the quote of the day maintaining that for 24 hours and not repeating it until all relevant quotes have been used
-<br/>
+<ul><li>'random' (which pick a random quote), </li>
+<li>'equal' (which tries to make sure all quotes are shown approximately the same number of times),</li>
+<li>'all' (will selects all the quotes (thank for the help of Joey Brunelle),</li>
+<li>'day' (which selects the quote of the day maintaining that for 24 hours and not repeating it until all relevant quotes have been used)</li>
+</ul>
 Note that this setting can be more or less relevant regarding the actualy source of the quotes.";
 $lang["paramtemplatehelp"]="Use this template to show the quotes";
-$lang["paramgroupshelp"]="Only show quotes attached to this/these groups, should contain a groupname or more seperated by commas.";
+$lang["paramgroupshelp"]="Only show quotes attached to this/these groups, should contain a text ID or more seperated by commas.";
 $lang["paramquoteshelp"]="Only show specific quote(s) specified by their text-id, seperated by commas. This overrides the groups-parameter.";
 
 $lang["templatehelp"]=<<<EOF
@@ -116,10 +117,9 @@ Among the planned features are retrieval of quotes from external sources like RS
 <h3>Usage</h3>
 Insert a module-call like this
 <pre>
-{Quotes <i>params</i>}
+{Quotes2 <i>params</i>}
 </pre>
 into your page or template.
 
 EOF;
-
 ?>

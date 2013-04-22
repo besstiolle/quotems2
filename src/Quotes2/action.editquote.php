@@ -1,5 +1,5 @@
 <?php
-if (!isset($gCms)) exit;
+if (!function_exists('cmsms')) exit;
 
 if (!isset($params["todo"])) exit;
 
@@ -36,19 +36,12 @@ switch ($params["todo"]) {
 			$inerror=true;
 			break;
 		}
-		/*if (!isset($params["description"]) || $params["description"]=="") {
-			echo $this->ShowErrors("Beskrivelse skal angives");
-			$inerror=true;
-			break;
-			}*/
-		//print_r($params);
 		if ($params["todo"]=="save") {
 			$quoteid=$this->AddQuote($type);
 		}
 		$this->SetQuoteProp($quoteid,"content",$params["content"]);
 		$this->SetQuoteProp($quoteid,"textid",$params["textid"]);
 		switch ($type) {
-			//$this->SetDescriptionProp($descriptionid,"title",$params["title"]);
 			case "1" : {
 				$this->SetQuoteProp($quoteid,"author",$params["author"]);
 				$this->SetQuoteProp($quoteid,"reference",$params["reference"]);
@@ -88,7 +81,6 @@ $reference="";
 
 if ($params["todo"]=="edit" || $params["todo"]=="copy") {
 	$thisquote=$this->GetQuote("",$quoteid);
-	//print_r($thisquote);
 	$content=$thisquote["content"];
 	$textid=$thisquote["textid"];
 	switch ($type) {

@@ -1,22 +1,10 @@
 <?php
+if (!function_exists('cmsms')) exit;
 
-
-if (!isset($gCms) || !$this->VisibleToAdminUser()) {
+if ( !$this->VisibleToAdminUser()) {
   echo $this->Lang("accessdenied");
   return;
 }
-
-/*
-if (isset($params["breadcrumbroot"])) 
-  $this->SetPreference("breadcrumbroot", $params["breadcrumbroot"]);
-  
-if (isset($params["rsstitle"]))
-  $this->SetPreference("rsstitle", $params["rsstitle"]);
-  
-if (isset($params["rssdescription"]))
-  $this->SetPreference("rssdescription", $params["rssdescription"]);
-  
-*/
   
 if (isset($params["allowwysiwyg"]))
   $this->SetPreference("allowwysiwyg", $params["allowwysiwyg"]);

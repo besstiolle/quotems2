@@ -1,5 +1,5 @@
 <?php
-if (!isset($gCms)) exit;
+if (!function_exists('cmsms')) exit;
 
 if (!isset($params["todo"])) exit;
 
@@ -40,7 +40,6 @@ switch ($params["todo"]) {
 			$inerror=true;
 			break;
 		}
-//print_r($params);die();
 		$this->AddTemplate($params["name"],$params["content"]);
 		
 		$params["module_message"]=$this->Lang("templateadded");

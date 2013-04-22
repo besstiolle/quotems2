@@ -1,5 +1,5 @@
 <?php
-if (!isset($gCms)) exit;
+if (!function_exists('cmsms')) exit;
 
 if (!isset($params["todo"])) exit;
 
@@ -34,7 +34,6 @@ switch ($params["todo"]) {
 			$inerror=true;
 			break;
 		}
-//print_r($params);die();
 		if ($params["description"]=="") $params["decription"]=$params["textid"];
 		$this->AddGroup($params["textid"],$params["description"]);
 		
@@ -78,6 +77,9 @@ switch ($params["todo"]) {
 		$this->Redirect($id, 'defaultadmin', $returnid,$params);
 		break;
 	}
+	case "add" : {
+		$textid="";
+	}
 }
 
 $name="";
@@ -89,7 +91,6 @@ if ($params["todo"]=="edit") {
 	$textid=$group["textid"];
 	$description=$group["description"];
 }
-
 if (isset($params["textid"])) $textid=$params["textid"];
 if (isset($params["description"])) $description=$params["description"];
 

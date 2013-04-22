@@ -1,5 +1,5 @@
 <?php
-if (!isset($gCms)) exit;
+if (!function_exists('cmsms')) exit;
 
 $db =& $this->GetDb();
 

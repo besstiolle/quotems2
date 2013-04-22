@@ -1,6 +1,7 @@
 <?php
+if (!function_exists('cmsms')) exit;
 
-if (!isset($gCms) || !$this->VisibleToAdminUser()) {
+if (!$this->VisibleToAdminUser()) {
   echo $this->Lang("accessdenied");
   return;
 }
@@ -96,25 +97,30 @@ echo $this->StartTab("groups");
 
 
 $groups=$this->GetGroups();
-//print_r($groups);
 $showgroups = array();
 if (TRUE == empty($groups)) {
 	$this->smarty->assign('nogroupstext', $this->Lang("nogroups"));
 } else {
 	foreach ($groups as $group) {
 		$onerow = new stdClass();
-		$name=$group["description"];
-		if ($name=="") $name=$group["textid"];
-		$onerow->name = $this->CreateLink($id, 'editgroup', $returnid, $name, array('groupid'=>$group["id"],"todo"=>"edit"));
-		$onerow->id = $group["id"];				
-		//echo $onerow->id;
-				$onerow->editlink = $this->CreateLink($id, 'editgroup', $returnid,
-																						$themeObject->DisplayImage('icons/system/edit.gif', $this->Lang("editgroup"),'','','systemicon'),
-																								array('groupid' => $group["id"],"todo"=>"edit"));
+		
+		$onerow->code = "";
+		if (!empty($group["textid"])) {
+			$onerow->code = $this->CreateLink($id, 'editgroup', $returnid, $group["textid"], array('groupid'=>$group["id"],"todo"=>"edit"));
+		}
+		
+		$onerow->desc = "";
+		if (!empty($group["description"])) {
+			$onerow->desc = $group["description"];
+		}
+		$onerow->id = $group["id"];			
+		$onerow->editlink = $this->CreateLink($id, 'editgroup', $returnid,
+									$themeObject->DisplayImage('icons/system/edit.gif', $this->Lang("editgroup"),'','','systemicon'),
+									array('groupid' => $group["id"],"todo"=>"edit"));
 		
 		$onerow->deletelink = $this->CreateLink($id, 'editgroup', $returnid,
-																						$themeObject->DisplayImage('icons/system/delete.gif', $this->Lang("deletegroup"),'','','systemicon'),
-																								array('groupid' => $group["id"],"todo"=>"delete"), $this->Lang("confirmdeletegroup"));
+									$themeObject->DisplayImage('icons/system/delete.gif', $this->Lang("deletegroup"),'','','systemicon'),
+									array('groupid' => $group["id"],"todo"=>"delete"), $this->Lang("confirmdeletegroup"));
 
 		array_push($showgroups, $onerow);
 	}
@@ -211,23 +217,7 @@ $this->smarty->assign('formend',$this->CreateFormEnd());
 
  $this->smarty->assign('allowwysiwygtext', $this->Lang("allowwysiwyg"));
  $this->smarty->assign('allowwysiwyginput', $this->CreateInputCheckbox($id,"allowwysiwyg",'1',$this->GetPreference("allowwysiwyg",'0')));
-/* $this->smarty->assign('captchatext', $this->Lang("enablecaptcha"));
- $this->smarty->assign('captchainput', $this->CreateInputCheckbox($id,"captchacomments",'1',$this->GetPreference("captchacomments",'0')));
- $this->smarty->assign('wysiwygtext', $this->Lang("allowwysiwyg"));
- $this->smarty->assign('wysiwyginput', $this->CreateInputCheckbox($id,"wysiwygentries",'1',$this->GetPreference("wysiwygentries",'0')));
- $this->smarty->assign('filestext', $this->Lang("allowfiles"));
- $this->smarty->assign('filesinput', $this->CreateInputCheckbox($id,"filesentries",'1',$this->GetPreference("filesentries",'0')));
- $this->smarty->assign('forcefiledescriptiontext', $this->Lang("forcefiledescription"));
- $this->smarty->assign('forcefiledescriptioninput', $this->CreateInputCheckbox($id,"forcefiledescription",'1',$this->GetPreference("forcefiledescription",'0')));
- $this->smarty->assign('breadcrumbtext', $this->Lang("showbreadcrumb"));
- $this->smarty->assign('breadcrumbinput', $this->CreateInputCheckbox($id,"enablebreadcrumb",'1',$this->GetPreference("enablebreadcrumb",'0')));
- $this->smarty->assign('recordiptext', $this->Lang("saveips"));
- $this->smarty->assign('recordipinput', $this->CreateInputCheckbox($id,"recordip",'1',$this->GetPreference("recordip",'0')));
- $this->smarty->assign('breadcrumbroottext', $this->Lang("blogpagealias"));
- $this->smarty->assign('breadcrumbrootinput', $this->CreateInputText($id,"breadcrumbroot",$this->GetPreference("breadcrumbroot",'blog'),40,255));
- $this->smarty->assign('filedirtext', $this->Lang("filedir"));
- $this->smarty->assign('filedirinput', $this->CreateInputText($id,"filedir",$this->GetPreference("filedir",'uploads/blogfiles'),40,255));
- */
+
 $this->smarty->assign('submit', $this->CreateInputSubmit($id,"submit",$this->Lang("savesettings")));//"Gem indstillinger"));
 
 echo $this->ProcessTemplate('settings.tpl');
